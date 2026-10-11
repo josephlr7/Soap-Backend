@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://pe.cibertec/facturacion"
+           targetNamespace="http://pe.cibertec/facturacion"
+           elementFormDefault="qualified">
+
+    <xs:element name="registrarFacturaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="rucEmisor">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[0-9]{11}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="dniCliente" minOccurs="0">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[0-9]{8}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="tipoComprobante">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="FACTURA"/>
+                            <xs:enumeration value="BOLETA"/>
+                            <xs:enumeration value="NOTA_CREDITO"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="numeroComprobante">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="montoTotal">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minExclusive value="0"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="registrarFacturaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoEstado" type="xs:string"/>
+                <xs:element name="mensaje" type="xs:string"/>
+                <xs:element name="estadoSunat" type="xs:string"/>
+                <xs:element name="razonSocialEmisor" type="xs:string"/>
+                <xs:element name="estadoReniec" type="xs:string"/>
+                <xs:element name="nombresCliente" type="xs:string"/>
+                <xs:element name="codigoOperacionInterna" type="xs:string"/>
+                <xs:element name="hashFirma" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="buscarFacturaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroComprobante" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="buscarFacturaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoEstado" type="xs:string"/>
+                <xs:element name="mensaje" type="xs:string"/>
+                <xs:element name="factura" type="tns:facturaType" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="listarFacturasRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="listarFacturasResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoEstado" type="xs:string"/>
+                <xs:element name="mensaje" type="xs:string"/>
+                <xs:element name="facturas" type="tns:facturaType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="actualizarEstadoFacturaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroComprobante" type="xs:string"/>
+                <xs:element name="nuevoEstado" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="actualizarEstadoFacturaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoEstado" type="xs:string"/>
+                <xs:element name="mensaje" type="xs:string"/>
+                <xs:element name="factura" type="tns:facturaType" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="eliminarFacturaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroComprobante" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="eliminarFacturaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigoEstado" type="xs:string"/>
+                <xs:element name="mensaje" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="facturaType">
+        <xs:sequence>
+            <xs:element name="rucEmisor" type="xs:string"/>
+            <xs:element name="dniCliente" type="xs:string"/>
+            <xs:element name="tipoComprobante" type="xs:string"/>
+            <xs:element name="numeroComprobante" type="xs:string"/>
+            <xs:element name="montoTotal" type="xs:decimal"/>
+            <xs:element name="estadoFactura" type="xs:string"/>
+            <xs:element name="estadoSunat" type="xs:string"/>
+            <xs:element name="razonSocialEmisor" type="xs:string"/>
+            <xs:element name="estadoReniec" type="xs:string"/>
+            <xs:element name="nombresCliente" type="xs:string"/>
+            <xs:element name="codigoOperacionInterna" type="xs:string"/>
+            <xs:element name="hashFirma" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

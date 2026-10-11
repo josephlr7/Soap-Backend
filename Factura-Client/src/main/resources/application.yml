@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: Factura-Client
+
+facturacion:
+  soap:
+    url: http://localhost:8090/ws/NovaMarketFacturacion
