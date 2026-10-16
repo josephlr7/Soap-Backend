@@ -11,5 +11,10 @@ public class Empresa {
     public String estadoSunat;
     public String condicionSunat;
     public String direccion;
+    public String nombreComercial;
+    public String ubigeo;
+    public String departamento;
+    public String provincia;
+    public String distrito;
 }
 

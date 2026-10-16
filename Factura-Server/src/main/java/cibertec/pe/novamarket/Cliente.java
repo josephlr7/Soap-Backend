@@ -11,5 +11,9 @@ public class Cliente {
     public String apellidos;
     public String nombreCompleto;
     public String direccion;
+    public String ubigeo;
+    public String departamento;
+    public String provincia;
+    public String distrito;
 }
 

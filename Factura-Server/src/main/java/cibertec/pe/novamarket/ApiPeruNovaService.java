@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +16,7 @@ public class ApiPeruNovaService {
     @Value("${novamarket.api-peru.token:}") private String token;
     private final ObjectMapper mapper;
     private final AuditoriaConsultaApiRepository auditoriaRepository;
-    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
 
     public ApiPeruNovaService(ObjectMapper mapper, AuditoriaConsultaApiRepository auditoriaRepository) {
         this.mapper = mapper;
@@ -33,6 +34,7 @@ public class ApiPeruNovaService {
         try {
             String body = "{\"" + campo + "\":\"" + documento + "\"}";
             HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + path))
+                    .timeout(Duration.ofSeconds(10))
                     .header("Authorization", "Bearer " + token)
                     .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
@@ -43,7 +45,12 @@ public class ApiPeruNovaService {
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 throw new IllegalStateException("ApiPeruDev HTTP " + response.statusCode() + ": " + response.body());
             }
-            return mapper.readTree(response.body()).path("data");
+            JsonNode payload = mapper.readTree(response.body());
+            JsonNode data = payload.path("data");
+            if (data.isMissingNode() || data.isNull() || data.isEmpty()) {
+                throw new IllegalStateException(payload.path("message").asText("El proveedor no devolvió datos"));
+            }
+            return data;
         } catch (Exception ex) {
             registrarAuditoria(tipo, documento, "ERROR");
             throw new IllegalStateException("Error consultando ApiPeruDev: " + ex.getMessage(), ex);
