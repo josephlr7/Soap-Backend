@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/caja")
+@RequestMapping({"/api/caja", "/caja"})
 @CrossOrigin(origins = "*")
 public class CajaController {
     private final NovaFacturacionService service;
