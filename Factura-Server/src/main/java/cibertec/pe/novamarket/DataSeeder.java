@@ -13,7 +13,7 @@ public class DataSeeder implements CommandLineRunner {
     private final ProductoRepository productoRepository;
     private final CajeroRepository cajeroRepository;
     private final EmpleadoRepository empleadoRepository;
-    @Value("${novamarket.admin.password:}") private String adminPassword;
+    @Value("${novamarket.admin.password:cajero123}") private String adminPassword;
 
     public DataSeeder(CategoriaRepository categoriaRepository, ProductoRepository productoRepository, CajeroRepository cajeroRepository,
             EmpleadoRepository empleadoRepository) {
@@ -24,17 +24,27 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     @Override public void run(String... args) {
-        if (empleadoRepository.findByCodigoEmpleado("CJ-001").isEmpty()) {
-            String password = adminPassword == null || adminPassword.isBlank() ? generarPasswordTemporal() : adminPassword;
-            Empleado e = new Empleado();
-            e.codigoEmpleado = "CJ-001";
-            e.usuario = "cajero";
-            e.passwordHash = new BCryptPasswordEncoder().encode(password);
-            e.nombres = "Cajero Nova";
-            e.rol = "CAJERO";
-            empleadoRepository.save(e);
-            System.out.println("Empleado inicial creado. Usuario: cajero | Password temporal: " + password);
-        }
+        String password = (adminPassword == null || adminPassword.isBlank()) ? "cajero123" : adminPassword;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        Empleado e = empleadoRepository.findByCodigoEmpleado("CJ-001").orElseGet(() -> {
+            Empleado nuevo = new Empleado();
+            nuevo.codigoEmpleado = "CJ-001";
+            nuevo.usuario = "cajero";
+            nuevo.nombres = "Cajero Nova";
+            nuevo.rol = "CAJERO";
+            nuevo.activo = true;
+            return nuevo;
+        });
+
+        e.usuario = "cajero";
+        e.passwordHash = encoder.encode(password);
+        e.activo = true;
+        empleadoRepository.save(e);
+        System.out.println("=================================================================");
+        System.out.println(">> Acceso NovaMarket listo | Usuario: cajero | Password: " + password);
+        System.out.println("=================================================================");
+
         if (cajeroRepository.findByCodigoEmpleado("CJ-001").isEmpty()) {
             Cajero c = new Cajero(); c.codigoEmpleado = "CJ-001"; c.nombres = "Cajero Nova"; cajeroRepository.save(c);
         }
@@ -49,12 +59,5 @@ public class DataSeeder implements CommandLineRunner {
     }
     private Categoria categoria(String nombre, String desc) { Categoria c = new Categoria(); c.nombre = nombre; c.descripcion = desc; return categoriaRepository.save(c); }
     private void producto(String sku, String nombre, BigDecimal precio, int stock, Categoria cat) { Producto p = new Producto(); p.sku = sku; p.nombre = nombre; p.precio = precio; p.stock = stock; p.unidad = "UND"; p.categoria = cat; productoRepository.save(p); }
-    private String generarPasswordTemporal() {
-        String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-        SecureRandom random = new SecureRandom();
-        StringBuilder password = new StringBuilder();
-        for (int i = 0; i < 12; i++) password.append(chars.charAt(random.nextInt(chars.length())));
-        return password.toString();
-    }
 }
 

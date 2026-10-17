@@ -4,4 +4,4 @@ spring:
 
 facturacion:
   soap:
-    url: http://localhost:8090/ws/NovaMarketFacturacion
+    url: ${SOAP_SERVICE_URL:${NOVAMARKET_SOAP_URL:http://localhost:8090/ws/NovaMarketFacturacion}}

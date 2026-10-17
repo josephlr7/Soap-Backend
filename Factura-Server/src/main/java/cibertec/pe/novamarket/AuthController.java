@@ -5,13 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(originPatterns = {
-        "http://localhost:*",
-        "http://127.0.0.1:*",
-        "http://192.168.*.*:*",
-        "http://10.*.*.*:*",
-        "http://172.*.*.*:*"
-})
+@CrossOrigin(origins = "*")
 public class AuthController {
     private final EmpleadoRepository empleadoRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

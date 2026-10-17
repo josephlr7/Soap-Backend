@@ -10,7 +10,9 @@ public class SoapClienteConfig {
     public static IFacturacionNovaMarketService getService() {
         FacturacionNovaMarketImplementService service = new FacturacionNovaMarketImplementService();
         IFacturacionNovaMarketService port = service.getFacturacionNovaMarketImplementPort();
-        String endpoint = System.getenv().getOrDefault("NOVAMARKET_SOAP_URL", DEFAULT_SOAP_URL);
+        String endpoint = System.getProperty("novamarket.soap.url",
+                System.getenv().getOrDefault("SOAP_SERVICE_URL",
+                System.getenv().getOrDefault("NOVAMARKET_SOAP_URL", DEFAULT_SOAP_URL)));
         ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
         return port;
     }

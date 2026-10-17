@@ -56,12 +56,12 @@
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
-                            <wsdlUrls>
-                                <wsdlUrl>http://localhost:8090/ws/NovaMarketFacturacion?wsdl</wsdlUrl>
-                            </wsdlUrls>
+                            <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
+                            <wsdlFiles>
+                                <wsdlFile>NovaMarketFacturacion.wsdl</wsdlFile>
+                            </wsdlFiles>
                             <packageName>cibertec.pe.wsclient</packageName>
                             <keep>true</keep>
-                            <fork>true</fork>
                         </configuration>
                     </execution>
                 </executions>

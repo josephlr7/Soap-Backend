@@ -1,13 +1,13 @@
 server:
-  port: 8085
+  port: ${PORT:${SERVER_PORT:8085}}
 
 spring:
   application:
     name: NovaMarket-Backend
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/novamarket_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=America/Lima&allowPublicKeyRetrieval=true
-    username: cliente
-    password: ${NOVAMARKET_DB_PASSWORD:nova}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/novamarket_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=America/Lima&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:170706}
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,9 +17,9 @@ spring:
         format_sql: true
 novamarket:
   admin:
-    password: ${NOVAMARKET_ADMIN_PASSWORD:}
-  soap-url: http://localhost:8090/ws/NovaMarketFacturacion
+    password: ${NOVAMARKET_ADMIN_PASSWORD:cajero123}
+  soap-url: ${NOVAMARKET_SOAP_URL:http://0.0.0.0:8090/ws/NovaMarketFacturacion}
   api-peru:
     base-url: https://api.apiperu.dev
-    token: ${APIPERU_TOKEN:}
+    token: ${APIPERU_TOKEN:a82d9f7a32dc7b3a83f9c61af8a342eeb70803e139227f17155037c30d37ef7c}
 

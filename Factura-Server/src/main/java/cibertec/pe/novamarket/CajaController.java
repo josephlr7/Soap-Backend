@@ -5,13 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/caja")
-@CrossOrigin(originPatterns = {
-        "http://localhost:*",
-        "http://127.0.0.1:*",
-        "http://192.168.*.*:*",
-        "http://10.*.*.*:*",
-        "http://172.*.*.*:*"
-})
+@CrossOrigin(origins = "*")
 public class CajaController {
     private final NovaFacturacionService service;
     public CajaController(NovaFacturacionService service) { this.service = service; }
